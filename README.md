@@ -6,6 +6,6 @@ Works as an API in a Flask app, deployed on Heroku.
 
 POST a timestamp in the format 'DD-MM-YYYY HH:MM', with a response coming in the format of '{ results: {results: <PREDICTION>} }'
   
-Contains a '/get' route that can be used for testing purposes.
+Contains a '/get' route that can be used for testing purposes if running on Localhost server.
 
 Built for use in a placement project for my MSc in Software Design with Artificial Intelligence from Athlone Institute of Technology, Ireland.

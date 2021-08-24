@@ -1,5 +1,6 @@
 import pandas as pd
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import json
 import requests
 import sys
@@ -13,6 +14,7 @@ pd.set_option('display.max_columns', None)
 model = keras.models.load_model('model.h5')
 
 app = Flask(__name__)
+CORS(app)
 
 def time_convert(time):
     from datetime import datetime

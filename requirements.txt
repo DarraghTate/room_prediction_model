@@ -1,5 +1,5 @@
 Flask==2.0.1
-flask-cors=3.0.10
+flask-cors==3.0.10
 pandas==1.2.1
 requests==2.22.0
 tensorflow-cpu==2.6.0

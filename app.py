@@ -113,8 +113,9 @@ def predict():
     result = model.predict(data)
     output = {'results': int(result[0])}
     result = output.get('results')
-    print(f'RESULT: {result}')
-    return jsonify(results=output)
+    response = jsonify(results=output)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @app.route('/get', methods = ['GET'])    

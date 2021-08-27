@@ -4,11 +4,13 @@ from flask_cors import CORS
 import json
 import requests
 import sys
-
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  
 from tensorflow import keras
-import pandas as pd
+import os
+
+# Limits TensorFlow text output (No loading messages)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  
+
+# Makes Pandas dataframes fully readable (prediction dataframe has 26 columns)
 pd.set_option('display.max_columns', None)
 
 model = keras.models.load_model('model.h5')
@@ -16,6 +18,7 @@ model = keras.models.load_model('model.h5')
 app = Flask(__name__)
 CORS(app)
 
+# Splits a datetime string into day (tokenised), month (tokenised) year, hour, minute, season (tokenised), and if it's during the semester (tokenised)
 def time_convert(time):
     from datetime import datetime
 
@@ -111,15 +114,19 @@ def predict():
     data = request.get_json(force=True)
     data = data['data']
     data = time_convert(data)
+    # Reorders the columns into the order in which the model was developed - random order is due to TensorFlow reorganising them
     data = data[['is_weekend', 'friday', 'saturday', 'tuesday', 'thursday', 'hour', 'sunday', 'wednesday', 'monday','jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec', 'is_during_semester','spring','summer','autumn','winter']]
     result = model.predict(data)
+    # Turns result into JSON with format "{'results': {'results' : <PREDICTION> } }"
     output = {'results': int(result[0])}
     result = output.get('results')
     response = jsonify(results=output)
+    # CORS function - allows external apps to connect to the API
     response.headers.add('Access-Control-Allow-Origin', '*')
+    # Returns JSON in format "{'results': {'results' : <PREDICTION> } }"
     return response
 
-
+# Not is use for deployment - used only for testing
 @app.route('/get', methods = ['GET'])    
 def get():
     params = {'data':'20-03-2021 13:00'}
@@ -132,4 +139,5 @@ def get():
     
 if __name__ == '__main__':
     app.logger.warning('testing warning log')
+    # Port 5000 only used in local testing
     app.run(port = 5000, debug=True)

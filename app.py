@@ -75,7 +75,7 @@ def time_convert(time):
     if month == 1:
         jan = 1
     elif month == 2:
-        feb = 2
+        feb = 1
     elif month == 3:
         mar = 1
     elif month == 4:
